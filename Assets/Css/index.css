@@ -3,3 +3,7 @@
     width: 12px !important;
     border: 0.1px solid grey !important;
 }
+
+html, body, #body{
+    height: 100%;
+}

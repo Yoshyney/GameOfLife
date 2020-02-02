@@ -4,15 +4,15 @@ const body = document.getElementById('body');
 const startButton = document.getElementById('start');
 const generation = document.getElementById('generation');
 const table_ = document.getElementById('table');
+const height = document.getElementById("height");
+const width = document.getElementById("width");
+const form = document.getElementById('form');
+const choice = document.getElementById('choice')
+const display = document.getElementById('display')
 let generationCount = 0; 
 let start = false;
 
 class Board{
-
-    constructor(height, width){
-        this.height = height
-        this.width = width
-    }
 
     define = () => {
         let table = document.createElement('table');
@@ -89,6 +89,24 @@ class Board{
         }
         return count;
     }
+
+    setHeight = (x) => {
+        this.height = x
+    }
+
+    setWidth = (x) => {
+        this.width = x
+    }
+
+}
+
+const launch = (x, y) => {
+    generation.innerHTML = `Generation number : ${generationCount}`;
+    board.setHeight(y);
+    board.setWidth(x);
+    board.define()
+    document.addEventListener('click', changeColor);
+    startButton.addEventListener('click', startGame);
 }
 
 const changeColor = (e) => {
@@ -117,9 +135,19 @@ const startGame = (e) => {
     }
 }
 
-document.addEventListener('click', changeColor);
-startButton.addEventListener('click', startGame);
+const getSize = (e) => {
+    e.preventDefault();
+    let h = parseInt(height.value, 10)
+    let w = parseInt(width.value, 10)
+    if(typeof w == 'number' && typeof h == 'number' && w <= 100 && h <= 100 && w >= 1 && h >= 1){
+        choice.className = "d-none"
+        display.className = "d-block"
+        launch(w, h);
+        return true
+    }else{
+        alert('There is an error !')        
+    }
+}
 
-const board = new Board(60, 50);
-board.define()
-generation.innerHTML = `Generation number : ${generationCount}`;
+const board = new Board();
+form.addEventListener('submit', getSize)
