@@ -3,11 +3,21 @@
     <head>
         <title>GameOfLife</title>
         <link rel="stylesheet" type="text/css" href="./Assets/Css/index.css">
+        <link rel="stylesheet" type="text/css" href="./Assets/Css/bootstrap.min.css">
     </head>
     <body>
         <div id="body">
-            <button id='start' type="button">Start!</button>
-            <h1 id="generation" ></h1>
+            <div class="d-flex justify-content-center">
+                <button id='start' class="btn btn-success mr-5" type="button">Start !</button>
+                <button id='stop' class="btn btn-danger" type="button">Stop !</button>
+            </div>
+            <div class="d-flex justify-content-center">
+                <h1 id="generation"></h1>
+            </div>
+            <div class="d-flex justify-content-center">
+                <div id='table'>
+                </div>
+            </div>
         </div>
         <script src="./Assets/Js/index.js"></script>
     </body>

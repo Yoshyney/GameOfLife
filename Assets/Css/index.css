@@ -1,5 +1,5 @@
 .td{
-    height: 12px;
-    width: 12px;
-    border: 0.1px solid grey;
+    height: 12px !important;
+    width: 12px !important;
+    border: 0.1px solid grey !important;
 }

@@ -1,6 +1,7 @@
 const body = document.getElementById('body');
 const startButton = document.getElementById('start');
 const generation = document.getElementById('generation');
+const table_ = document.getElementById('table');
 let generationCount = 0; 
 let start = false;
 
@@ -12,16 +13,19 @@ class Board{
     }
 
     define = () => {
+        let table = document.createElement('table');
         for(var x = 1; x <= this.height; x++){
             let tr = document.createElement("tr");
             body.appendChild(tr);
             for(var y = 1; y <= this.width; y++){
                 let td = document.createElement("td");
                 this.setA(td, [['id', `${x}:${y}`] ,['class', 'td'], ['style', 'background-color: white;']]);
-                let lastTr = body.lastChild;
+                var lastTr = body.lastChild;
                 lastTr.appendChild(td);
             }
+            table.appendChild(lastTr);
         }
+        table_.appendChild(table);
     }
 
     setA = (element, array) => {
@@ -86,7 +90,8 @@ class Board{
 }
 
 const changeColor = (e) => {
-    if(start){
+    let val = e.target
+    if(start || val.tagName != 'TD'){
         return;
     }
     let colorTile = e.path[0].style.backgroundColor;
