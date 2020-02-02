@@ -1,3 +1,5 @@
+'use strict'
+
 const body = document.getElementById('body');
 const startButton = document.getElementById('start');
 const generation = document.getElementById('generation');
