@@ -1,5 +1,3 @@
-'use strict'
-
 const body = document.getElementById('body');
 const startButton = document.getElementById('start');
 const stopButton = document.getElementById('stop');
@@ -11,9 +9,15 @@ const width = document.getElementById("width");
 const form = document.getElementById('form');
 const choice = document.getElementById('choice')
 const display = document.getElementById('display')
+const max = document.getElementById('max');
+const min = document.getElementById('min');
+const avg = document.getElementById('avg');
+const maxGen = document.getElementById('maxGen');
+const minGen = document.getElementById('minGen');
 let generationCount = 0; 
 let start = false;
 let interval;
+let total = 0;
 
 class Board{
 
@@ -40,6 +44,7 @@ class Board{
     }
 
     play = (elements) => {
+        this.count = 0;
         let array = [];
         for(let element of elements){
             let result = this.rule(element)
@@ -48,6 +53,7 @@ class Board{
             }
         }
         this.replaceTile(array);
+        return this.count;
     };
 
     replaceTile = (elements) => {
@@ -68,11 +74,14 @@ class Board{
             if(count > 3 || count < 2){
                 newElement.style.backgroundColor = 'white';
                 return newElement;
+            }else{
+                this.count++
             }
         }else{
             let count = this.countTile(h, w, color)
             if(count == 3){
                 newElement.style.backgroundColor = 'black';
+                this.count++
                 return newElement;
             }
         }
@@ -144,8 +153,12 @@ const startGame = (e) => {
         start = true;
         interval = setInterval( () => {
             generation.innerHTML = `Generation number : ${generationCount}`;
-            board.play(elements);
+            let result = board.play(elements);
             generationCount++;
+            changeValue(result)
+            if(result == 0){
+
+            }
         }, 100)
     }
 }
@@ -165,9 +178,28 @@ const resetGame = (e) => {
             start = false
         }
         resetButton.className = resetButton.className + ' d-none'
+        avg.innerHTML = '0';
+        min.innerHTML = '0';
+        max.innerHTML = '0';
+        maxGen.innerHTML = '0';
+        minGen.innerHTML = '0';
+        total = 0;
         generationCount = 0;
         generation.innerHTML = `Generation number : ${generationCount}`;
         board.clear();
+}
+
+const changeValue = (a) => {
+    if(a > parseInt(max.innerHTML, 10)){
+        max.innerHTML = a
+        maxGen.innerHTML = generationCount
+    }
+    if(a < parseInt(min.innerHTML, 10) || generationCount == 1){
+        min.innerHTML = a
+        minGen.innerHTML = generationCount
+    }
+    total = total + a
+    avg.innerHTML = Math.floor( total / generationCount);
 }
 
 const getSize = (e) => {
@@ -183,6 +215,7 @@ const getSize = (e) => {
         alert('There is an error !')        
     }
 }
+
 
 const board = new Board();
 form.addEventListener('submit', getSize)
