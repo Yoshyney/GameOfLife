@@ -7,14 +7,15 @@ const table_ = document.getElementById('table');
 const height = document.getElementById("height");
 const width = document.getElementById("width");
 const form = document.getElementById('form');
-const choice = document.getElementById('choice')
-const display = document.getElementById('display')
+const choice = document.getElementById('choice');
+const display = document.getElementById('display');
 const max = document.getElementById('max');
 const min = document.getElementById('min');
 const avg = document.getElementById('avg');
 const maxGen = document.getElementById('maxGen');
 const minGen = document.getElementById('minGen');
 const random = document.getElementById('random');
+const actual = document.getElementById('actual');
 let generationCount = 0; 
 let start = false;
 let interval;
@@ -117,7 +118,6 @@ class Board{
             while(true){
                 let w = Math.floor(Math.random() * Math.floor(this.width) + 1);
                 let h = Math.floor(Math.random() * Math.floor(this.height) + 1);
-                console.log(h, w)
                 let e = document.getElementById(`${h}:${w}`);
                 if(e.style.backgroundColor == 'white'){
                     e.style.backgroundColor = 'black';
@@ -125,6 +125,7 @@ class Board{
                 }
             }
         }
+        actual.innerHTML = n;
     }
 
     clear = () => {
@@ -133,6 +134,7 @@ class Board{
         for(let element of elements){
             element.style.backgroundColor = 'white';
         }
+        actual.innerHTML = '0';
     }
 
 }
@@ -173,8 +175,10 @@ const changeColor = (e) => {
     let colorTile = e.path[0].style.backgroundColor;
     if(colorTile == 'white'){
         colorTile = 'black';
+        actual.innerHTML = parseInt(actual.innerHTML, 10) + 1;
     }else{
         colorTile = 'white';
+        actual.innerHTML = parseInt(actual.innerHTML, 10) - 1;
     }
     e.path[0].style.backgroundColor = colorTile;
 };
@@ -237,6 +241,7 @@ const changeValue = (a) => {
         minGen.innerHTML = generationCount
     }
     total = total + a
+    actual.innerHTML = a;
     avg.innerHTML = Math.floor( total / generationCount);
 }
 
@@ -253,7 +258,6 @@ const getSize = (e) => {
         alert('There is an error !')        
     }
 }
-
 
 const board = new Board();
 form.addEventListener('submit', getSize)
