@@ -2,6 +2,8 @@
 
 const body = document.getElementById('body');
 const startButton = document.getElementById('start');
+const stopButton = document.getElementById('stop');
+const resetButton = document.getElementById('reset');
 const generation = document.getElementById('generation');
 const table_ = document.getElementById('table');
 const height = document.getElementById("height");
@@ -11,6 +13,7 @@ const choice = document.getElementById('choice')
 const display = document.getElementById('display')
 let generationCount = 0; 
 let start = false;
+let interval;
 
 class Board{
 
@@ -98,6 +101,14 @@ class Board{
         this.width = x
     }
 
+    clear = () => {
+        let table = table_.firstChild;
+        let elements = document.getElementsByClassName('td');
+        for(let element of elements){
+            element.style.backgroundColor = 'white';
+        }
+    }
+
 }
 
 const launch = (x, y) => {
@@ -107,6 +118,8 @@ const launch = (x, y) => {
     board.define()
     document.addEventListener('click', changeColor);
     startButton.addEventListener('click', startGame);
+    stopButton.addEventListener('click', stopGame);
+    resetButton.addEventListener('click', resetGame);
 }
 
 const changeColor = (e) => {
@@ -125,9 +138,11 @@ const changeColor = (e) => {
 
 const startGame = (e) => {
     if(!start){
+        stopButton.className = stopButton.className.replace('d-none', '')
+        resetButton.className = resetButton.className.replace('d-none', '')
         let elements = document.getElementsByClassName('td');
         start = true;
-        setInterval( () => {
+        interval = setInterval( () => {
             generation.innerHTML = `Generation number : ${generationCount}`;
             board.play(elements);
             generationCount++;
@@ -135,11 +150,31 @@ const startGame = (e) => {
     }
 }
 
+const stopGame = (e) => {
+    if(start){
+        start = false
+        clearInterval(interval)
+        stopButton.className = stopButton.className + ' d-none'
+    }
+}
+
+const resetGame = (e) => {
+        if(stopButton.className.indexOf('d-none') == -1){
+            clearInterval(interval)
+            stopButton.className = stopButton.className + ' d-none'
+            start = false
+        }
+        resetButton.className = resetButton.className + ' d-none'
+        generationCount = 0;
+        generation.innerHTML = `Generation number : ${generationCount}`;
+        board.clear();
+}
+
 const getSize = (e) => {
     e.preventDefault();
     let h = parseInt(height.value, 10)
     let w = parseInt(width.value, 10)
-    if(typeof w == 'number' && typeof h == 'number' && w <= 100 && h <= 100 && w >= 1 && h >= 1){
+    if(typeof w == 'number' && typeof h == 'number' && w <= 70 && h <= 70 && w >= 1 && h >= 1){
         choice.className = "d-none"
         display.className = "d-block"
         launch(w, h);
