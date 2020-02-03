@@ -14,6 +14,7 @@ const min = document.getElementById('min');
 const avg = document.getElementById('avg');
 const maxGen = document.getElementById('maxGen');
 const minGen = document.getElementById('minGen');
+const random = document.getElementById('random');
 let generationCount = 0; 
 let start = false;
 let interval;
@@ -110,6 +111,22 @@ class Board{
         this.width = x
     }
 
+    randomGen(n){
+        this.clear();
+        for(let x = 0; x < n ; x++){
+            while(true){
+                let w = Math.floor(Math.random() * Math.floor(this.width) + 1);
+                let h = Math.floor(Math.random() * Math.floor(this.height) + 1);
+                console.log(h, w)
+                let e = document.getElementById(`${h}:${w}`);
+                if(e.style.backgroundColor == 'white'){
+                    e.style.backgroundColor = 'black';
+                    break;
+                }
+            }
+        }
+    }
+
     clear = () => {
         let table = table_.firstChild;
         let elements = document.getElementsByClassName('td');
@@ -129,6 +146,23 @@ const launch = (x, y) => {
     startButton.addEventListener('click', startGame);
     stopButton.addEventListener('click', stopGame);
     resetButton.addEventListener('click', resetGame);
+    random.addEventListener('click', randomGeneration);
+}
+
+const randomGeneration = (e) => {
+    let m = board.height * board.width;
+    while(true){
+        let  result = prompt("Choose the number of tile you want to color max is " + m.toString() , "");
+        if (result == null || result == "") {
+            break;
+            return false;
+        } else {
+            if(parseInt(result, 10) <= m){
+                board.randomGen(parseInt(result, 10));
+                break;
+            }
+        }
+    }
 }
 
 const changeColor = (e) => {
@@ -149,6 +183,9 @@ const startGame = (e) => {
     if(!start){
         stopButton.className = stopButton.className.replace('d-none', '')
         resetButton.className = resetButton.className.replace('d-none', '')
+        if(random.className.indexOf('d-none') == -1){
+            random.className = random.className + ' d-none';
+        }
         let elements = document.getElementsByClassName('td');
         start = true;
         interval = setInterval( () => {
@@ -178,6 +215,7 @@ const resetGame = (e) => {
             start = false
         }
         resetButton.className = resetButton.className + ' d-none'
+        random.className = random.className.replace('d-none', '')
         avg.innerHTML = '0';
         min.innerHTML = '0';
         max.innerHTML = '0';
